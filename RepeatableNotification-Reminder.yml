@@ -1,0 +1,36 @@
+alias: Machine à laver - Rappel de fin
+description: >-
+  Renvoie une notification et relance le timer pour rappeler que la machine à
+  laver doit être vidée
+trigger:
+  - platform: event
+    event_type: timer.finished
+    event_data:
+      entity_id: timer.reminder_machine_a_laver
+condition: []
+action:
+  - service: timer.start
+    data:
+      duration: "00:15:00"
+    target:
+      entity_id: timer.reminder_machine_a_laver
+  - service: notify.<your_phone>
+    data:
+      message: Machine à laver terminée
+      title: Rappel
+      data:
+        tag: reminder_mal
+        actions:
+          - action: REMIND_15_MAL
+            title: Rappel dans 15min
+            icon: sfsymbols:goforward.15
+          - action: REMIND_30_MAL
+            title: Rappel dans 30min
+            icon: sfsymbols:goforward.30
+          - action: REMIND_60_MAL
+            title: Rappel dans 1h
+            icon: sfsymbols:goforward.60
+          - action: REMIND_OK_MAL
+            title: C'est fait!
+            icon: sfsymbols:checkmark
+mode: single

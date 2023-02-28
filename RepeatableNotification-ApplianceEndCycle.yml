@@ -1,0 +1,33 @@
+alias: Machine à laver - fin de cycle
+description: Envoie une notification et déclenche le timer pour les rappels
+use_blueprint:
+  path: >-
+    sbyx/notify-or-do-something-when-an-appliance-like-a-dishwasher-or-washing-machine-finishes.yaml
+  input:
+    power_sensor: sensor.<your_power_sensor>
+    starting_threshold: 3
+    actions:
+      - service: timer.start
+        data:
+          duration: "00:15:00"
+        target:
+          entity_id: timer.reminder_machine_a_laver
+      - service: notify.<your_phone>
+        data:
+          message: Vider la machine
+          title: Machine à laver - fin de cycle
+          data:
+            tag: reminder_mal
+            actions:
+              - action: REMIND_15_MAL
+                title: Rappel dans 15min
+                icon: sfsymbols:goforward.15
+              - action: REMIND_30_MAL
+                title: Rappel dans 30min
+                icon: sfsymbols:goforward.30
+              - action: REMIND_60_MAL
+                title: Rappel dans 1h
+                icon: sfsymbols:goforward.60
+              - action: REMIND_OK_MAL
+                title: C'est fait!
+                icon: sfsymbols:checkmark

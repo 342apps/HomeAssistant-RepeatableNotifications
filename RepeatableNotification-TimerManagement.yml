@@ -1,0 +1,64 @@
+alias: Machine à laver - Gestion du timer
+description: >-
+  Gère les relances de timer en fonction des actions faites en réponse aux notifications
+trigger:
+  - platform: event
+    event_type: mobile_app_notification_action
+    event_data:
+      action: REMIND_15_MAL
+    id: REMINDER_15_MAL
+  - platform: event
+    event_type: mobile_app_notification_action
+    event_data:
+      action: REMIND_30_MAL
+    id: REMINDER_30_MAL
+  - platform: event
+    event_type: mobile_app_notification_action
+    event_data:
+      action: REMIND_60_MAL
+    id: REMINDER_60_MAL
+  - platform: event
+    event_type: mobile_app_notification_action
+    event_data:
+      action: REMIND_OK_MAL
+    id: REMIND_OK_MAL
+condition: []
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: REMINDER_15_MAL
+        sequence:
+          - service: timer.start
+            data:
+              duration: "00:15:00"
+            target:
+              entity_id: timer.reminder_machine_a_laver
+      - conditions:
+          - condition: trigger
+            id: REMINDER_30_MAL
+        sequence:
+          - service: timer.start
+            data:
+              duration: "00:30:00"
+            target:
+              entity_id: timer.reminder_machine_a_laver
+      - conditions:
+          - condition: trigger
+            id: REMINDER_60_MAL
+        sequence:
+          - service: timer.start
+            data:
+              duration: "01:00:00"
+            target:
+              entity_id: timer.reminder_machine_a_laver
+      - conditions:
+          - condition: trigger
+            id: REMIND_OK_MAL
+        sequence:
+          - service: timer.cancel
+            target:
+              entity_id: timer.reminder_machine_a_laver
+            data: {}
+    default: []
+mode: single
